@@ -4,9 +4,8 @@ import {
   createUserDocumentFromAuth,
 } from "../../utils/firebase/firebase.utils";
 import FormInput from "../form-input/form-input.component";
-import "./sign-up-form.styles.scss"
+import "./sign-up-form.styles.scss";
 import CustomButton from "../custom-button/custom-button.component";
-
 
 const defaultFormFeilds = {
   displayName: "",
@@ -19,6 +18,10 @@ function SignUpForm() {
   const [formFeilds, setFormFeilds] = useState(defaultFormFeilds);
 
   const { displayName, email, password, confirmPassword } = formFeilds;
+
+  function resetFeilds() {
+    setFormFeilds(defaultFormFeilds);
+  }
 
   async function handleChange(event) {
     const { name, value } = event.target;
@@ -41,22 +44,24 @@ function SignUpForm() {
         email,
         password
       );
-      console.log(
         await createUserDocumentFromAuth({
           ...response.user,
           displayName: displayName,
         })
-      );
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
         alert("Profile Already Exists");
       }
+      else
+        console.log(error)
     }
+    resetFeilds();
   }
 
   return (
     <div className="sign-up-container">
-      <h2>Sign Up With your Email and Password</h2>
+      <h2>Don't have an account ?</h2>
+      <span>Sign Up With your Email and Password</span>
       <form onSubmit={handleSubmit}>
         <FormInput
           label="Display Name"
