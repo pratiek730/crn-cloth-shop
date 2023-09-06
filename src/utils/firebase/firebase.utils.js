@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, signInWithPopup } from "firebase/auth";
 import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -12,7 +12,7 @@ const firebaseConfig = {
   measurementId: "G-STHMV1LDXF",
 };
 
-const firebaseApp = initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 
 const provider = new GoogleAuthProvider();
 
@@ -27,6 +27,12 @@ export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
 const db = getFirestore();
 
 export const createUserDocumentFromAuth = async (userAuth) => {
+
+  if(!userAuth) 
+  {
+    return;
+  }
+
   const userDocRef = doc(db, "users", userAuth.uid);
 
   const userSnapshot = await getDoc(userDocRef);
@@ -47,3 +53,14 @@ export const createUserDocumentFromAuth = async (userAuth) => {
 
   return userDocRef;
 };
+
+
+export const createAuthUserFromEmailAndPassword = async (email, password) => {
+  if(!email || !password)
+  {
+    return {error : "Invalid Request"};
+  }
+  return await createUserWithEmailAndPassword(auth, email, password);
+
+
+}
