@@ -1,6 +1,5 @@
 import { useState } from "react";
 import {
-  createUserDocumentFromAuth,
   signInAuthUserWithEmailAndPassword,
   signInWithGooglePopup,
 } from "../../utils/firebase/firebase.utils";
@@ -13,19 +12,15 @@ const defaultFormFeilds = {
   password: "",
 };
 
-
-
 function SignInForm() {
   const [formFeilds, setFormFeilds] = useState(defaultFormFeilds);
-
   const { email, password } = formFeilds;
 
   function resetFeilds() {
-    setFormFeilds(defaultFormFeilds)
+    setFormFeilds(defaultFormFeilds);
   }
   const signInWithGoogle = async () => {
-    const response = await signInWithGooglePopup();
-    await createUserDocumentFromAuth(response.user);
+    await signInWithGooglePopup();
   };
 
   async function handleChange(event) {
@@ -39,24 +34,21 @@ function SignInForm() {
   async function handleSubmit(event) {
     event.preventDefault();
 
-    try{
-      const response = await signInAuthUserWithEmailAndPassword(email, password)
-      console.log(response)
-    }catch(error) {
-
-      switch(error){
-        case 'auth/wrong-password':
-          alert('incorrect password for email')
+    try {
+      await signInAuthUserWithEmailAndPassword(email, password);
+    } catch (error) {
+      switch (error) {
+        case "auth/wrong-password":
+          alert("incorrect password for email");
           break;
-        case 'auth/user-not-found':
-          alert('no user associated with this email')
+        case "auth/user-not-found":
+          alert("no user associated with this email");
           break;
         default:
-          console.error(error)
-
+          console.error(error);
       }
     }
-    resetFeilds()
+    resetFeilds();
   }
 
   return (
@@ -82,7 +74,11 @@ function SignInForm() {
         />
         <div className="buttons-container">
           <CustomButton type="submit">Sign In</CustomButton>
-          <CustomButton type="button" buttonType="google" onClick={signInWithGoogle}>
+          <CustomButton
+            type="button"
+            buttonType="google"
+            onClick={signInWithGoogle}
+          >
             Google Sign In
           </CustomButton>
         </div>

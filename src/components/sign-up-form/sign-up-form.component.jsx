@@ -16,7 +16,6 @@ const defaultFormFeilds = {
 
 function SignUpForm() {
   const [formFeilds, setFormFeilds] = useState(defaultFormFeilds);
-
   const { displayName, email, password, confirmPassword } = formFeilds;
 
   function resetFeilds() {
@@ -44,16 +43,14 @@ function SignUpForm() {
         email,
         password
       );
-        await createUserDocumentFromAuth({
-          ...response.user,
-          displayName: displayName,
-        })
+      await createUserDocumentFromAuth({
+        ...response.user,
+        displayName: displayName,
+      });
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
         alert("Profile Already Exists");
-      }
-      else
-        console.log(error)
+      } else console.log(error);
     }
     resetFeilds();
   }
