@@ -24,7 +24,7 @@ function SignUpForm() {
 
   async function handleChange(event) {
     const { name, value } = event.target;
-    await setFormFeilds({
+    setFormFeilds({
       ...formFeilds,
       [name]: value,
     });
